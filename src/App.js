@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import New from './pages/New';
 import Edit from './pages/Edit';
 import Diary from './pages/Diary';
+import { useEffect } from 'react';
 
 
 const reducer = (state, action) => {
@@ -32,6 +33,7 @@ const reducer = (state, action) => {
     default:
       return state;
   } 
+  localStorage.setItem('diary', JSON.stringify(newState))
   return newState;
 }
 
@@ -76,6 +78,18 @@ const dummyData = [
 function App() {
   const [data, dispatch] = useReducer(reducer, dummyData);
 
+  useEffect(()=>{
+    const localData = localStorage.getItem('diary');
+    if(localData) {
+      const diaryList = JSON.parse(localData).sort(
+        (a, b) => parseInt(b.id) - parseInt(a.id)
+      );
+      dataId.current = parseInt(diaryList[0].id) + 1;
+
+      dispatch({ type: 'INIT', data: diaryList });
+    }
+  },[]);
+
   const  dataId = useRef(6);
   //dummpy 데이터 id값 +1부터 시작하게
 
@@ -85,9 +99,9 @@ function App() {
       type: 'CREATE',
       data: {
         id:dataId.current,
-        date: new Date().getTime(),
+        emotion,
         content,
-        emotion
+        date: new Date().getTime(),
       },
     });
     dataId.current += 1;
@@ -105,9 +119,9 @@ function App() {
       type: 'EDIT',
       data: {
         id: targetId,
-        date: new Date(date).getTime(),
+        emotion,
         content,
-        emotion
+        date: new Date(date).getTime(),
       }
     })
 

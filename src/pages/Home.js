@@ -19,15 +19,15 @@ const Home = () => {
             const firstDay = new Date(
                 curDate.getFullYear(),
                 curDate.getMonth(),
-                1
+                1 //첫 날 (시, 분, 초는 입력 안해서 0시 0분 0초로 설정됨)
             ).getTime();
             const lastDay = new Date(
                 curDate.getFullYear(),
                 curDate.getMonth() + 1,              
-                0,               
-                23,                
-                59,               
-                59
+                0, //전 달의 마지막 날              
+                23, //시간                
+                59, //분              
+                59 //초
             ).getTime();
 
             setData(diaryList.filter((it) => firstDay <= it.date && it.date <= lastDay));
